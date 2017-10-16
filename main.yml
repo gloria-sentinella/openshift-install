@@ -1,0 +1,72 @@
+# Host Preparation  to install Openshift
+
+- hosts: openshift # Select invetory to provision
+  become: true     # Allow sudo
+ 
+  tasks:
+
+  - name: Edit the /etc/sysconfig/docker file and add --insecure-registry 172.30.0.0/16 to the OPTIONS parameter
+    command: sed -i '/OPTIONS=.*/c\OPTIONS="--selinux-enabled --insecure-registry 172.30.0.0/16"' /etc/sysconfig/docker
+
+  - name: Enable only the repositories required by OpenShift Container Platform 3.6
+    command: subscription-manager repos --enable="rhel-7-server-rpms"
+
+  - name: Enable only the repositories required by OpenShift Container Platform 3.6
+    command: subscription-manager repos --enable="rhel-7-server-extras-rpms"
+
+  - name: Enable only the repositories required by OpenShift Container Platform 3.6
+    command: subscription-manager repos --enable="rhel-7-server-ose-3.6-rpms"
+
+  - name: Enable only the repositories required by OpenShift Container Platform 3.6
+    command: subscription-manager repos --enable="rhel-7-fast-datapath-rpms"
+ 
+  - name: Install GIT
+    yum:
+      name: git
+      state: present
+
+  - name: install net-tools
+    yum:
+      name: net-tools
+      state: present
+
+  - name: install bind-utils
+    yum:
+      name: bind-utils
+      state: present
+
+  - name: install iptables-services
+    yum:
+      name: iptables-services
+      state: present
+
+
+  - name: install bridge-utils
+    yum:
+      name: bridge-utils
+      state: present
+
+  - name: install bash-completion
+    yum:
+      name: bash-completion
+      state: present
+
+  - name: install kexec-tools
+    yum:
+      name: kexec-tools
+      state: present
+
+  - name: install sos
+    yum:
+      name: sos
+      state: present
+
+  - name: install psacct
+    yum:
+      name: psacct
+      state: present
+
+  - name: upgrade all package
+    yum:
+      name: '*'
+      state: latest
